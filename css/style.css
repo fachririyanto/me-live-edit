@@ -1,0 +1,65 @@
+.ui-me-live-edit {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    margin-top: -55px;
+}
+.ui-me-live-edit .mle-wrapper {
+    display: inline-block;
+    position: relative;
+    padding: 6px 10px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    color: transparent;
+    background-color: #12ab64;
+    border: 1px solid #12ab64;
+    border-radius: 40px;
+    box-shadow: 0 0 6px rgba(0,0,0,.2);
+    transition: background-color .2s, border-color .2s;
+}
+.ui-me-live-edit .mle-wrapper::before {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    z-index: 1;
+    content: '';
+    margin-left: -10px;
+    width: 0;
+    height: 0;
+    border: 10px solid;
+    border-top-color: #12ab64;
+    transition: border-color .2s;
+}
+.ui-me-live-edit .mle-wrapper:hover {
+    background-color: #098c4f;
+    border-color: #098c4f;
+}
+.ui-me-live-edit .mle-wrapper:hover::before {
+    border-top-color: #098c4f;
+}
+.ui-me-live-edit .mle-icon {
+    display: inline-block;
+    vertical-align: middle;
+}
+.ui-me-live-edit .mle-icon .dashicons {
+    width: 28px;
+    height: 28px;
+    font-size: 28px;
+    color: #fff;
+}
+.ui-me-live-edit .mle-label {
+    display: inline-block;
+    padding-left: 2px;
+    padding-right: 16px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    vertical-align: middle;
+}
+.me-live-edit-is-loading {
+    opacity: .5;
+}
+
+.fancybox-container {
+    z-index: 100002;
+}
