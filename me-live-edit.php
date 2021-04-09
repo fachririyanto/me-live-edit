@@ -21,9 +21,9 @@ class MeLiveEdit {
      * @since 1.0.0
      */
     function init() {
-        add_action('wp_footer', array($this, 'render_frontend_script'));
-        add_action('admin_head', array($this, 'render_admin_stylesheet'));
-        add_action('wp_enqueue_scripts', array($this, 'register_scripts'));
+        add_action( 'wp_footer', array( $this, 'render_frontend_script' ) );
+        add_action( 'admin_head', array( $this, 'render_admin_stylesheet' ) );
+        add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
     }
 
     /**
@@ -34,7 +34,7 @@ class MeLiveEdit {
      * @since 1.0.0
      */
     function render_frontend_script() {
-        if (!is_user_logged_in()) return;
+        if ( ! is_user_logged_in() ) return;
         ?><script type="text/javascript">
             (function($) {
                 $(window).on('load', function() {
@@ -91,7 +91,7 @@ class MeLiveEdit {
      */
     function render_admin_stylesheet() {
         // @docs https://stackoverflow.com/questions/6662542/check-if-site-is-inside-iframe
-        if (isset($_SERVER['HTTP_SEC_FETCH_DEST']) && $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe') :
+        if ( isset( $_SERVER['HTTP_SEC_FETCH_DEST'] ) && $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe' ) :
             ?>
             <style>
                 html.wp-toolbar {
@@ -135,17 +135,17 @@ class MeLiveEdit {
      * @since 1.0.0
      */
     function register_scripts() {
-        if (isset($_GET['live_edit_reload_element'])) {
+        if ( isset( $_GET['live_edit_reload_element'] ) ) {
             return;
         }
-        if (is_user_logged_in()) {
+        if ( is_user_logged_in() ) {
             // stylesheet
-            wp_enqueue_style('me-live-edit-fancybox', 'https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css', array(), '3.5.7');
-            wp_enqueue_style('me-live-edit-style', plugins_url('/css/style.css', __FILE__), array('me-live-edit-fancybox'), $this->version);
+            wp_enqueue_style( 'me-live-edit-fancybox', 'https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css', array(), '3.5.7' );
+            wp_enqueue_style( 'me-live-edit-style', plugins_url( '/css/style.css', __FILE__ ), array( 'me-live-edit-fancybox' ), $this->version );
 
             // scripts
-            wp_enqueue_script('jquery');
-            wp_enqueue_script('fancybox', 'https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js', array('jquery'), '3.5.7', true);
+            wp_enqueue_script( 'jquery' );
+            wp_enqueue_script( 'fancybox', 'https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js', array( 'jquery' ), '3.5.7', true );
         }
     }
 }
@@ -161,10 +161,10 @@ class MeLiveEdit {
 function me_live_edit_customizer_link() {
     // get current url
     global $wp;
-    $current_url = home_url($wp->request);
+    $current_url = home_url( $wp->request );
 
     // setup customizer link
-    $customizer_link = admin_url('/customize.php?url=' . urlencode($current_url));
+    $customizer_link = admin_url( '/customize.php?url=' . urlencode( $current_url ) );
     return $customizer_link;
 }
 
@@ -176,11 +176,11 @@ function me_live_edit_customizer_link() {
  * @param string $location
  * @since 1.0.0
  */
-function me_live_edit_menu_link($location) {
+function me_live_edit_menu_link( $location ) {
     $theme_locations = get_nav_menu_locations();
-    if (isset($theme_locations[$location])) {
-        $menu_id   = $theme_locations[$location];
-        $admin_url = admin_url('/nav-menus.php?action=edit&menu=' . $menu_id);
+    if ( isset( $theme_locations[ $location ] ) ) {
+        $menu_id   = $theme_locations[ $location ];
+        $admin_url = admin_url( '/nav-menus.php?action=edit&menu=' . $menu_id );
     } else {
         $admin_url = admin_url();
     }
@@ -198,11 +198,11 @@ function me_live_edit_menu_link($location) {
  * @return string $add_or_edit_link
  * @since 1.0.0
  */
-function me_live_edit_link($action, $object_type, $post_id) {
-    if ($action == 'edit') {
-        $admin_url = get_edit_post_link($post_id);
+function me_live_edit_link( $action, $object_type, $post_id ) {
+    if ( $action == 'edit' ) {
+        $admin_url = get_edit_post_link( $post_id );
     } else {
-        $admin_url = admin_url('/post-new.php?post_type=' . $object_type);
+        $admin_url = admin_url( '/post-new.php?post_type=' . $object_type );
     }
     return $admin_url . '&live_edit_embeded=true';
 }
@@ -218,16 +218,13 @@ function me_live_edit_link($action, $object_type, $post_id) {
  * @return void
  * @since 1.0.0
  */
-function me_live_edit_custom_link($args = array()) {
-    if (!is_user_logged_in()) {
-        return;
-    }
-    if (is_preview() || is_customize_preview()) {
+function me_live_edit_custom_link( $args = array() ) {
+    if ( ! is_user_logged_in() || is_preview() || is_customize_preview() ) {
         return;
     }
 
     // define default args
-    $args = wp_parse_args($args, array(
+    $args = wp_parse_args( $args, array(
         /**
          * Admin page link.
          * 
@@ -256,10 +253,10 @@ function me_live_edit_custom_link($args = array()) {
          * @var string
          */
         'element_id' => '#ui-target-reloaded'
-    ));
+    ) );
 
     // define custom admin link
-    $admin_url = admin_url($args['admin_link']);
+    $admin_url = admin_url( $args['admin_link'] );
 
     // render element
     ?><div class="ui-me-live-edit">
@@ -284,16 +281,13 @@ function me_live_edit_custom_link($args = array()) {
  * @return void
  * @since 1.0.0
  */
-function me_live_edit_customizer($args = array()) {
-    if (!is_user_logged_in()) {
-        return;
-    }
-    if (is_preview() || is_customize_preview()) {
+function me_live_edit_customizer( $args = array() ) {
+    if ( ! is_user_logged_in() || is_preview() || is_customize_preview() ) {
         return;
     }
 
     // define default args
-    $args = wp_parse_args($args, array(
+    $args = wp_parse_args( $args, array(
         /**
          * Section name.
          * 
@@ -315,11 +309,11 @@ function me_live_edit_customizer($args = array()) {
          * @var string
          */
         'text_label' => 'New Post',
-    ));
+    ) );
 
     // define customizer link
     $admin_url = me_live_edit_customizer_link();
-    if (!empty($args['section'])) {
+    if ( ! empty( $args['section'] ) ) {
         $admin_url .= '&autofocus[section]=' . $args['section'];
     }
 
@@ -346,16 +340,13 @@ function me_live_edit_customizer($args = array()) {
  * @return void
  * @since 1.0.0
  */
-function me_live_edit_menus($args = array()) {
-    if (!is_user_logged_in()) {
-        return;
-    }
-    if (is_preview() || is_customize_preview()) {
+function me_live_edit_menus( $args = array() ) {
+    if ( ! is_user_logged_in() || is_preview() || is_customize_preview() ) {
         return;
     }
 
     // define default args
-    $args = wp_parse_args($args, array(
+    $args = wp_parse_args( $args, array(
         /**
          * Theme location name.
          * 
@@ -384,10 +375,10 @@ function me_live_edit_menus($args = array()) {
          * @var string
          */
         'element_id' => '#ui-target-reloaded'
-    ));
+    ) );
 
     // define admin URL
-    $admin_url = me_live_edit_menu_link($args['theme_location']);
+    $admin_url = me_live_edit_menu_link( $args['theme_location'] );
 
     // render element
     ?><div class="ui-me-live-edit">
@@ -412,16 +403,13 @@ function me_live_edit_menus($args = array()) {
  * @param $args array
  * @since 1.0.0
  */
-function me_live_edit($args = array()) {
-    if (!is_user_logged_in()) {
-        return;
-    }
-    if (is_preview() || is_customize_preview()) {
+function me_live_edit( $args = array() ) {
+    if ( ! is_user_logged_in() || is_preview() || is_customize_preview() ) {
         return;
     }
 
     // define default args
-    $args = wp_parse_args($args, array(
+    $args = wp_parse_args( $args, array(
         /**
          * Post type name.
          * 
@@ -467,7 +455,7 @@ function me_live_edit($args = array()) {
     ));
 
     // define admin URL
-    $admin_url = me_live_edit_link($args['action'], $args['object_type'], $args['post_id']);
+    $admin_url = me_live_edit_link( $args['action'], $args['object_type'], $args['post_id'] );
 
     // render element
     ?><div class="ui-me-live-edit">
